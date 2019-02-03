@@ -1,4 +1,4 @@
-package nl.noppe.network;
+package nl.noppe.network.dao;
 
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -7,20 +7,14 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.apache.log4j.Logger;
 
-public class NewDeviceService {
+public abstract class DynamoDbDao {
 
-    private static final Logger logger = Logger.getLogger(NewDeviceService.class);
+    private static final Logger logger = Logger.getLogger(DynamoDbDao.class);
+    final DynamoDBMapper dynamoDBMapper;
 
-    public NewDeviceResponse saveDevice(Device device) {
-
-        logger.info("Request received: " + device);
-
+    public DynamoDbDao() {
         AmazonDynamoDB amazonDynamoDB = initDynamoClient();
-        DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
-
-        dynamoDBMapper.save(device);
-
-        return new NewDeviceResponse(201);
+        dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
     }
 
     private AmazonDynamoDB initDynamoClient() {
@@ -37,5 +31,4 @@ public class NewDeviceService {
 
         return dynamoDBClient;
     }
-
 }

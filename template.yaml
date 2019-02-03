@@ -16,26 +16,24 @@ Resources:
     NewDeviceFunction:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
-            CodeUri: target/newDeviceFunction-1.0.jar
-            Handler: nl.noppe.network.NewDeviceService::handleRequest
+            CodeUri: build/libs/network-device-api-1.0.jar
+            Handler: nl.noppe.network.ListDeviceService::getDevices
             Runtime: java8
             Events:
                 NewDevice:
                     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
                     Properties:
-                        Path: /device
-                        Method: post
-
-Outputs:
-
-    HelloWorldApi:
-      Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-
-    HelloWorldFunction:
-      Description: "Hello World Lambda Function ARN"
-      Value: !GetAtt HelloWorldFunction.Arn
-
-    HelloWorldFunctionIamRole:
-      Description: "Implicit IAM Role created for Hello World function"
-      Value: !GetAtt HelloWorldFunctionRole.Arn
+                        Path: /devices
+                        Method: get
+    NewEventFunction:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        CodeUri: build/libs/network-device-api-1.0.jar
+        Handler: nl.noppe.network.dhcp.DhcpEventHandler::handleRequest
+        Runtime: java8
+        Events:
+          NewEvent:
+            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+            Properties:
+              Path: /event
+              Method: post

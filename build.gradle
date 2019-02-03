@@ -1,0 +1,64 @@
+import jp.classmethod.aws.gradle.lambda.AWSLambdaMigrateFunctionTask
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "jp.classmethod.aws:gradle-aws-plugin:0.38"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+//apply plugin: ''
+apply plugin: 'java'
+apply plugin: 'jp.classmethod.aws'              // Gradle tasks for AWS stuff
+apply plugin: 'jp.classmethod.aws.lambda'       // Gradle tasks for deploying and running lambda's
+apply plugin: 'com.github.johnrengelman.shadow' // To create a fatjar which can be uploaded to AWS
+
+group 'nl.noppe'
+version '1.0'
+sourceCompatibility = 1.8
+
+aws {
+    profileName = 'anoppe'
+    region = 'eu-west-1'
+}
+
+lambda {
+    region = "eu-west-1"
+}
+
+shadowJar {
+    baseName = 'network-device-api'
+    classifier = null
+    version = project.version
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version:'1.2.0'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version:'1.11.6'
+    compile group: 'com.amazonaws', name: 'aws-lambda-java-log4j', version:'1.0.0'
+    implementation 'com.amazonaws:aws-lambda-java-events:2.1.0'
+    runtime group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.3'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+// Task to deploy the code to AWS
+task deployFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: [shadowJar, test]) {
+    functionName = "handleDhcpEvent"
+    runtime = com.amazonaws.services.lambda.model.Runtime.Java8
+    role = "arn:aws:iam::${aws.accountId}:role/handleDhcpEventLambdaRole"
+
+    zipFile = shadowJar.archivePath
+    handler = "nl.noppe.network.dhcp.DhcpEventHandler::handleRequest"
+    memorySize = 512
+    timeout = 20
+
+}

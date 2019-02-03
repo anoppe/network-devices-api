@@ -1,9 +1,8 @@
-package nl.noppe.network;
+package nl.noppe.network.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @DynamoDBTable(tableName = "network-devices")
 public class Device {
@@ -17,6 +16,7 @@ public class Device {
     public Device() {
     }
 
+    @JsonProperty("id")
     @DynamoDBHashKey(attributeName = "mac-address")
     public String getId() {
         return id;
@@ -26,6 +26,7 @@ public class Device {
         this.id = id;
     }
 
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
@@ -50,12 +51,23 @@ public class Device {
         this.ipv6Address = ipv6Address;
     }
 
-    @DynamoDBRangeKey(attributeName = "registration-datetime")
+    @JsonProperty("registrationDate")
     public String getRegistrationDate() {
         return registrationDate;
     }
 
     public void setRegistrationDate(String registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", ipv4Address='" + ipv4Address + '\'' +
+                ", ipv6Address='" + ipv6Address + '\'' +
+                ", registrationDate='" + registrationDate + '\'' +
+                '}';
     }
 }
