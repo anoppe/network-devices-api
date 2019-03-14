@@ -2,3 +2,5 @@
 .mvn/
 dependency-reduced-pom.xml
 newDeviceFunction.iml
+gradle
+build
