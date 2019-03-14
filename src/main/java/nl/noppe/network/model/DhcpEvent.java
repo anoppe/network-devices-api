@@ -4,7 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "dhcp-events")
+@DynamoDBTable(tableName = "dhcp-events-v2")
 public class DhcpEvent {
 
     private String operation;
@@ -21,7 +21,7 @@ public class DhcpEvent {
         this.operation = operation;
     }
 
-    @DynamoDBHashKey(attributeName = "mac-address")
+    @DynamoDBHashKey(attributeName = "macAddress")
     public String getMacAddress() {
         return macAddress;
     }

@@ -8,6 +8,8 @@ import nl.noppe.network.model.Device;
 import nl.noppe.network.model.DhcpEvent;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
 public class DhcpEventHandler implements RequestHandler<DhcpEvent, DhcpEventResponse> {
 
     private static final Logger logger = Logger.getLogger(DhcpEventHandler.class);
@@ -20,6 +22,10 @@ public class DhcpEventHandler implements RequestHandler<DhcpEvent, DhcpEventResp
         logger.info(String.format("Request received: %s", dhcpEvent));
 
         return handleDhcpEvent(dhcpEvent);
+    }
+
+    public List<DhcpEvent> getEventsForDevice(String deviceId) {
+        return dhcpEventDao.getEventsForDevice(deviceId);
     }
 
     public DhcpEventResponse handleDhcpEvent(DhcpEvent event) {

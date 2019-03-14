@@ -16,4 +16,9 @@ public class ListDeviceService {
         logger.info("Request for all devices received");
         return DEVICE_DAO.getAll();
     }
+
+    public Device getDeviceByMac(String macAddress) {
+        logger.info(String.format("Request for device with macAddress received: %s", macAddress));
+        return DEVICE_DAO.getByMac(macAddress);
+    }
 }

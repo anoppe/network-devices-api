@@ -1,5 +1,6 @@
 package nl.noppe.network.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -52,6 +53,7 @@ public class Device {
     }
 
     @JsonProperty("registrationDate")
+    @DynamoDBAttribute(attributeName = "registrationDate")
     public String getRegistrationDate() {
         return registrationDate;
     }

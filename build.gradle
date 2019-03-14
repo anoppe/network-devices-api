@@ -51,13 +51,64 @@ dependencies {
 }
 
 // Task to deploy the code to AWS
-task deployFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: [shadowJar, test]) {
+task deployHandleDhcpEventsFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: [shadowJar, test]) {
     functionName = "handleDhcpEvent"
     runtime = com.amazonaws.services.lambda.model.Runtime.Java8
     role = "arn:aws:iam::${aws.accountId}:role/handleDhcpEventLambdaRole"
 
     zipFile = shadowJar.archivePath
     handler = "nl.noppe.network.dhcp.DhcpEventHandler::handleRequest"
+    memorySize = 512
+    timeout = 20
+
+}
+
+// Task to deploy the code to AWS
+task deployReadDhcpEventsFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: [shadowJar, test]) {
+    functionName = "readDhcpEvent"
+    runtime = com.amazonaws.services.lambda.model.Runtime.Java8
+    role = "arn:aws:iam::${aws.accountId}:role/handleDhcpEventLambdaRole"
+
+    zipFile = shadowJar.archivePath
+    handler = "nl.noppe.network.dhcp.DhcpEventHandler::getEventsForDevice"
+    memorySize = 512
+    timeout = 20
+
+}
+// Task to deploy the code to AWS
+task deployMigrateDhcpEventsFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: [shadowJar, test]) {
+    functionName = "migrate-dhcp-events"
+    runtime = com.amazonaws.services.lambda.model.Runtime.Java8
+    role = "arn:aws:iam::${aws.accountId}:role/handleDhcpEventLambdaRole"
+
+    zipFile = shadowJar.archivePath
+    handler = "nl.noppe.network.dhcp.DhcpEventMigrator::migrateDhcpEvents"
+    memorySize = 512
+    timeout = 20
+
+}
+
+// Task to deploy the code to AWS
+task deployReadNetworkDevicesFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: [shadowJar, test]) {
+    functionName = "read-network-devices"
+    runtime = com.amazonaws.services.lambda.model.Runtime.Java8
+    role = "arn:aws:iam::${aws.accountId}:role/readNetworkDevicesLambdaRole"
+
+    zipFile = shadowJar.archivePath
+    handler = "nl.noppe.network.device.ListDeviceService::getDevices"
+    memorySize = 512
+    timeout = 20
+
+}
+
+// Task to deploy the code to AWS
+task deployReadDevicesByMacFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: [shadowJar, test]) {
+    functionName = "read-network-device-by-mac"
+    runtime = com.amazonaws.services.lambda.model.Runtime.Java8
+    role = "arn:aws:iam::${aws.accountId}:role/readNetworkDevicesLambdaRole"
+
+    zipFile = shadowJar.archivePath
+    handler = "nl.noppe.network.device.ListDeviceService::getDeviceByMac"
     memorySize = 512
     timeout = 20
 

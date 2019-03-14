@@ -17,7 +17,7 @@ Resources:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
             CodeUri: build/libs/network-device-api-1.0.jar
-            Handler: nl.noppe.network.ListDeviceService::getDevices
+            Handler: nl.noppe.network.device.ListDeviceService::getDevices
             Runtime: java8
             Events:
                 NewDevice:

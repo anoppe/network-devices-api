@@ -24,4 +24,7 @@ public class DeviceDao extends DynamoDbDao {
         return dynamoDBMapper.scan(Device.class, new DynamoDBScanExpression());
     }
 
+    public Device getByMac(String macAddress) {
+        return dynamoDBMapper.load(Device.class, macAddress);
+    }
 }
